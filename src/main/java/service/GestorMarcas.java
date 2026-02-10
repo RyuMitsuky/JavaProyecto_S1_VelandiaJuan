@@ -1,13 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package service;
 
-/**
- *
- * @author camper
- */
 public class GestorMarcas {
-    
+
+    public void menu() {
+        System.out.println("\n--- GESTIÓN DE MARCAS ---");
+        System.out.println("Aquí va el menú de marcas");
+    }
 }
