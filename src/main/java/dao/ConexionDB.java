@@ -6,15 +6,12 @@ import java.sql.SQLException;
 
 public class ConexionDB {
 
-    public static Connection conectar() {
-        try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/tecnostore_db", "campus2023", "campus2023");
-            System.out.println(" Conexión exitosa a la base de datos TecnoStore");
-            return conn;
-        } catch (SQLException e) {
-            System.out.println(" Error al conectar a la base de datos");
-            System.out.println(e.getMessage());
-            return null;
-        }
+    private static final String URL =
+        "jdbc:mysql://localhost:3306/tecnostore_db?useSSL=false&serverTimezone=UTC";
+    private static final String USER = "root";
+    private static final String PASS = ""; 
+
+    public static Connection getConexion() throws SQLException {
+        return DriverManager.getConnection(URL, USER, PASS);
     }
 }
