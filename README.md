@@ -1,129 +1,222 @@
-```
-# Sistema de Gestión de Celulares
-**Java + MySQL + JDBC**
+📱 Sistema de Gestión de Celulares (Java + MySQL)
+📌 Descripción del proyecto
 
----
+Este proyecto es una aplicación de consola desarrollada en Java, cuyo objetivo es gestionar un inventario de celulares utilizando una base de datos MySQL mediante JDBC.
 
-## 📋 Descripción del proyecto
+El sistema permite realizar operaciones básicas de gestión (CRUD) y está diseñado siguiendo una arquitectura por capas para facilitar el mantenimiento y la escalabilidad del código.
 
-Aplicación de consola en **Java** para la gestión de un inventario de celulares, conectada a una base de datos **MySQL** usando **JDBC**.
+✅ Funcionalidades principales
 
-Está pensada como proyecto académico para practicar:
+Registrar celulares en la base de datos
 
-- Programación Orientada a Objetos
-- Conexión y manejo de bases de datos con JDBC
-- Arquitectura por capas (separación de responsabilidades)
-- Estructura limpia y mantenible de proyectos Java
+Listar celulares existentes
 
-### Funcionalidades principales
+Gestionar información como:
 
-- Registrar nuevos celulares
-- Listar todos los celulares del inventario
-- Gestionar: marca, modelo, sistema operativo, gama, precio y stock
-- Validaciones básicas (precio y stock > 0)
+Marca
 
----
+Modelo
 
-## 🗂 Estructura del proyecto
-```
+Sistema operativo
 
-src/ ├── dao/ │ ├── ConexionDB.java # Configuración y conexión a MySQL │ └── CelularDAO.java # Operaciones CRUD (por ahora INSERT y SELECT) │ ├── model/ │ ├── Celular.java # Entidad principal │ └── CategoriaGama.java # Enum: ALTA, MEDIA, BAJA │ ├── service/ │ └── GestorCelulares.java # Lógica de negocio + menú interactivo │ └── Main.java # Punto de entrada del programa
+Gama
 
-text
+Precio
 
-```
-### Resumen de responsabilidades por capa
+Stock
 
-| Capa       | Responsabilidad principal                              | Clases principales              |
-|------------|----------------------------------------------------------------|---------------------------------|
-| `model`    | Representar las entidades del dominio                          | `Celular`, `CategoriaGama`      |
-| `dao`      | Acceso a datos (conexión y consultas SQL)                      | `ConexionDB`, `CelularDAO`      |
-| `service`  | Lógica de negocio, validaciones y flujo con el usuario        | `GestorCelulares`               |
-| ---          | Entrada principal del programa                                 | `Main`                          |
+Validar datos básicos (precio y stock positivos)
 
----
+🎯 Enfoque académico
 
-## ▶ Ejemplo de uso
-```
+El proyecto está orientado a reforzar conceptos de:
 
+Programación Orientada a Objetos (POO)
+
+JDBC
+
+Separación de responsabilidades
+
+Estructura de proyectos Java
+
+Arquitectura en capas
+
+🗂️ Estructura del proyecto
+src/
+├── dao/
+│   ├── ConexionDB.java
+│   └── CelularDAO.java
+│
+├── model/
+│   ├── Celular.java
+│   └── CategoriaGama.java
+│
+├── service/
+│   └── GestorCelulares.java
+│
+└── Main.java
+
+📦 Descripción de los paquetes
+📁 model
+
+Contiene las clases que representan las entidades del negocio.
+
+🔹 Celular
+
+Atributos:
+
+id
+
+idMarca
+
+modelo
+
+sistemaOperativo
+
+gama
+
+precio
+
+stock
+
+🔹 CategoriaGama (enum)
+ALTA,
+MEDIA,
+BAJA
+
+📁 dao
+
+Contiene las clases responsables del acceso a datos mediante JDBC.
+
+🔹 ConexionDB
+
+Establece la conexión con la base de datos MySQL
+
+Centraliza la configuración de:
+
+URL
+
+Usuario
+
+Contraseña
+
+Driver JDBC
+
+🔹 CelularDAO
+
+Inserta celulares en la base de datos
+
+Lista los celulares registrados
+
+Ejecuta sentencias SQL (INSERT, SELECT)
+
+📁 service
+
+Contiene la lógica del sistema y la interacción con el usuario.
+
+🔹 GestorCelulares
+
+Muestra el menú de gestión de celulares
+
+Solicita datos por consola
+
+Valida información básica
+
+Invoca los métodos del DAO
+
+📁 Main
+
+Clase principal del sistema.
+
+Contiene el método main
+
+Inicia la ejecución del programa
+
+Llama al menú principal
+
+▶️ Ejemplo de ejecución
 === GESTIÓN DE CELULARES ===
-
-1.  Listar celulares
-2.  Registrar celular
-3.  Volver
-
+1. Listar celulares
+2. Registrar celular
+0. Volver
 Opción: 2
 
-=== REGISTRAR NUEVO CELULAR === ID de la marca: 1 Modelo: Galaxy S23 Sistema operativo: Android Gama (ALTA, MEDIA, BAJA): ALTA Precio: 4200 Stock: 15
+=== REGISTRAR NUEVO CELULAR ===
+ID de la marca: 1
+Modelo: Galaxy S23
+Sistema operativo: Android
+Gama (ALTA, MEDIA, BAJA): ALTA
+Precio: 4200
+Stock: 15
 
 Celular insertado correctamente.
 
---- LISTADO DE CELULARES --- ID MARCA MODELO SO GAMA PRECIO STOCK 1 Samsung Galaxy S23 Android ALTA 4200.00 15
+--- LISTADO DE CELULARES ---
+ID  MARCA        MODELO             SO         GAMA    PRECIO     STOCK
+1   Samsung      Galaxy S23         Android    ALTA    4200.00    15
 
-text
-
-```
----
-
-## 🗄 Configuración de la base de datos (MySQL)
-
-### 1. Crear la base de datos y tabla
-
-```sql
+🗄️ Configuración de MySQL
+📌 Creación de la base de datos
 CREATE DATABASE tienda_celulares;
-
 USE tienda_celulares;
 
+📌 Creación de la tabla celulares
 CREATE TABLE celulares (
-    id              INT AUTO_INCREMENT PRIMARY KEY,
-    id_marca        INT NOT NULL,
-    modelo          VARCHAR(100) NOT NULL,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_marca INT NOT NULL,
+    modelo VARCHAR(100) NOT NULL,
     sistema_operativo VARCHAR(50) NOT NULL,
-    gama            ENUM('ALTA', 'MEDIA', 'BAJA') NOT NULL,
-    precio          DOUBLE NOT NULL,
-    stock           INT NOT NULL
+    gama ENUM('ALTA', 'MEDIA', 'BAJA') NOT NULL,
+    precio DOUBLE NOT NULL,
+    stock INT NOT NULL
 );
-```
 
-### 2\. Configuración en ConexionDB.java
+🔌 Configuración JDBC
 
-Java
+En la clase ConexionDB.java se debe configurar:
 
-```
-private static final String URL      = "jdbc:mysql://localhost:3306/tienda_celulares";
-private static final String USUARIO  = "root";
-private static final String PASSWORD = "TU_CONTRASEÑA_AQUÍ";
-private static final String DRIVER   = "com.mysql.cj.jdbc.Driver";
-```
+🔹 URL
+jdbc:mysql://localhost:3306/tienda_celulares
 
-### Requisitos para que funcione
+🔹 Usuario
+root
 
--   MySQL corriendo (versión 8+ recomendada)
--   Base de datos y tabla creadas
--   Usuario/contraseña correctos
--   **MySQL Connector/J** agregado al proyecto (JAR en classpath)
--   Java 17 o superior
+🔹 Contraseña
+(tu contraseña de MySQL)
 
-* * * * *
+🔹 Driver
+com.mysql.cj.jdbc.Driver
 
-✅ Requisitos técnicos
----------------------
+⚠️ Verificar que:
 
--   **Java**: 17 o superior
--   **MySQL**: 8 o superior
--   **Driver**: MySQL Connector/J (compatible con Java 8+)
--   **IDE** recomendado: IntelliJ IDEA, Eclipse o NetBeans
+MySQL esté en ejecución
 
-* * * * *
+El conector MySQL Connector/J esté agregado al proyecto
 
-🚀 Ideas para extender el proyecto
-----------------------------------
+La base de datos configurada coincida con la usada en el código
 
--   Agregar **actualizar** y **eliminar** celulares (UPDATE / DELETE)
--   Crear tabla de **marcas** y relación con celulares
--   Gestión de **clientes** y **ventas**
--   Control de **stock** al vender
--   Reportes básicos (celulares por gama, stock bajo, más caros...)
--   Manejo avanzado de excepciones (clases personalizadas)
--   Aplicar patrones de diseño (DAO mejorado, Service Layer, etc.)
--   Principios **SOLID** y refactorización
+💻 Requisitos del sistema
+
+Java 17 o superior
+
+MySQL 8 o superior
+
+MySQL Connector/J
+
+IDE (NetBeans, IntelliJ IDEA o Eclipse)
+
+🚀 Posibles mejoras futuras
+
+Este proyecto sirve como base para extender funcionalidades como:
+
+Actualizar y eliminar celulares
+
+Gestión de clientes y ventas
+
+Manejo de excepciones personalizadas
+
+Reportes y análisis de datos
+
+Aplicación de patrones de diseño
+
+Implementación de principios SOLID
