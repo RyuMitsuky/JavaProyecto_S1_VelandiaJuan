@@ -1,222 +1,161 @@
-📱 Sistema de Gestión de Celulares (Java + MySQL)
-📌 Descripción del proyecto
+# 📱 Sistema de Gestión de Celulares - TecnoStore
 
-Este proyecto es una aplicación de consola desarrollada en Java, cuyo objetivo es gestionar un inventario de celulares utilizando una base de datos MySQL mediante JDBC.
+## 📖 Descripción
 
-El sistema permite realizar operaciones básicas de gestión (CRUD) y está diseñado siguiendo una arquitectura por capas para facilitar el mantenimiento y la escalabilidad del código.
+Aplicación de consola desarrollada en **Java** que permite gestionar celulares utilizando una base de datos **MySQL** mediante **JDBC**.
 
-✅ Funcionalidades principales
+El proyecto es de carácter académico y está enfocado en la práctica de:
 
-Registrar celulares en la base de datos
+- CRUD 
+- Conexión a base de datos con JDBC
+- Organización básica por capas
+- Manejo de relaciones entre tablas
 
-Listar celulares existentes
+---
 
-Gestionar información como:
+## 🚀 Funcionalidades
 
-Marca
+- ✅ Registro de marcas
+- ✅ Registro de clientes
+- ✅ Registro de celulares
+- ✅ Gestión de ventas
+- ✅ Control de stock
+- ✅ Persistencia de datos en MySQL
+- ✅ Validación de datos (precio, stock, etc.)
 
-Modelo
+---
 
-Sistema operativo
+## 🛠 Tecnologías utilizadas
 
-Gama
+- **Java 17**
+- **MySQL**
+- **JDBC (MySQL Connector/J)**
 
-Precio
+---
 
-Stock
+## 🗄 Base de Datos - TecnoStore
 
-Validar datos básicos (precio y stock positivos)
+### 🔹 Creación de la base de datos
 
-🎯 Enfoque académico
+```sql
+DROP DATABASE IF EXISTS tecnostore;
+CREATE DATABASE tecnostore;
+USE tecnostore;
+```
 
-El proyecto está orientado a reforzar conceptos de:
+---
 
-Programación Orientada a Objetos (POO)
+### 🔹 Creación de tablas
 
-JDBC
+```sql
+-- Tabla marcas
+CREATE TABLE marcas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL UNIQUE
+);
 
-Separación de responsabilidades
+-- Tabla clientes
+CREATE TABLE clientes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    identificacion VARCHAR(20) NOT NULL UNIQUE,
+    correo VARCHAR(100) NOT NULL,
+    telefono VARCHAR(20)
+);
 
-Estructura de proyectos Java
-
-Arquitectura en capas
-
-🗂️ Estructura del proyecto
-src/
-├── dao/
-│   ├── ConexionDB.java
-│   └── CelularDAO.java
-│
-├── model/
-│   ├── Celular.java
-│   └── CategoriaGama.java
-│
-├── service/
-│   └── GestorCelulares.java
-│
-└── Main.java
-
-📦 Descripción de los paquetes
-📁 model
-
-Contiene las clases que representan las entidades del negocio.
-
-🔹 Celular
-
-Atributos:
-
-id
-
-idMarca
-
-modelo
-
-sistemaOperativo
-
-gama
-
-precio
-
-stock
-
-🔹 CategoriaGama (enum)
-ALTA,
-MEDIA,
-BAJA
-
-📁 dao
-
-Contiene las clases responsables del acceso a datos mediante JDBC.
-
-🔹 ConexionDB
-
-Establece la conexión con la base de datos MySQL
-
-Centraliza la configuración de:
-
-URL
-
-Usuario
-
-Contraseña
-
-Driver JDBC
-
-🔹 CelularDAO
-
-Inserta celulares en la base de datos
-
-Lista los celulares registrados
-
-Ejecuta sentencias SQL (INSERT, SELECT)
-
-📁 service
-
-Contiene la lógica del sistema y la interacción con el usuario.
-
-🔹 GestorCelulares
-
-Muestra el menú de gestión de celulares
-
-Solicita datos por consola
-
-Valida información básica
-
-Invoca los métodos del DAO
-
-📁 Main
-
-Clase principal del sistema.
-
-Contiene el método main
-
-Inicia la ejecución del programa
-
-Llama al menú principal
-
-▶️ Ejemplo de ejecución
-=== GESTIÓN DE CELULARES ===
-1. Listar celulares
-2. Registrar celular
-0. Volver
-Opción: 2
-
-=== REGISTRAR NUEVO CELULAR ===
-ID de la marca: 1
-Modelo: Galaxy S23
-Sistema operativo: Android
-Gama (ALTA, MEDIA, BAJA): ALTA
-Precio: 4200
-Stock: 15
-
-Celular insertado correctamente.
-
---- LISTADO DE CELULARES ---
-ID  MARCA        MODELO             SO         GAMA    PRECIO     STOCK
-1   Samsung      Galaxy S23         Android    ALTA    4200.00    15
-
-🗄️ Configuración de MySQL
-📌 Creación de la base de datos
-CREATE DATABASE tienda_celulares;
-USE tienda_celulares;
-
-📌 Creación de la tabla celulares
+-- Tabla celulares
 CREATE TABLE celulares (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_marca INT NOT NULL,
-    modelo VARCHAR(100) NOT NULL,
-    sistema_operativo VARCHAR(50) NOT NULL,
+    modelo VARCHAR(50) NOT NULL,
+    sistema_operativo VARCHAR(30) NOT NULL,
     gama ENUM('ALTA', 'MEDIA', 'BAJA') NOT NULL,
-    precio DOUBLE NOT NULL,
-    stock INT NOT NULL
+    precio DECIMAL(10,2) NOT NULL,
+    stock INT NOT NULL,
+    FOREIGN KEY (id_marca) REFERENCES marcas(id)
 );
 
-🔌 Configuración JDBC
+-- Tabla ventas
+CREATE TABLE ventas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_cliente INT NOT NULL,
+    fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    total DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (id_cliente) REFERENCES clientes(id)
+);
 
-En la clase ConexionDB.java se debe configurar:
+-- Tabla detalle_ventas
+CREATE TABLE detalle_ventas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_venta INT NOT NULL,
+    id_celular INT NOT NULL,
+    cantidad INT NOT NULL,
+    subtotal DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (id_venta) REFERENCES ventas(id),
+    FOREIGN KEY (id_celular) REFERENCES celulares(id)
+);
+```
 
-🔹 URL
-jdbc:mysql://localhost:3306/tienda_celulares
+---
 
-🔹 Usuario
-root
+### 🔹 Datos de prueba
 
-🔹 Contraseña
-(tu contraseña de MySQL)
+```sql
+INSERT INTO marcas (nombre) VALUES
+('Samsung'),
+('Apple'),
+('Xiaomi'),
+('Motorola');
 
-🔹 Driver
-com.mysql.cj.jdbc.Driver
+INSERT INTO clientes (nombre, identificacion, correo, telefono) VALUES
+('Juan Pérez', '1001234567', 'juan@gmail.com', '3001234567'),
+('María Gómez', '1007654321', 'maria@gmail.com', '3019876543'),
+('Carlos López', '1001112223', 'carlos@gmail.com', '3024567890');
 
-⚠️ Verificar que:
+INSERT INTO celulares (id_marca, modelo, sistema_operativo, gama, precio, stock) VALUES
+(1, 'Galaxy S23', 'Android', 'ALTA', 3800.00, 10),
+(1, 'Galaxy A54', 'Android', 'MEDIA', 1800.00, 15),
+(2, 'iPhone 14', 'iOS', 'ALTA', 4500.00, 8),
+(3, 'Redmi Note 12', 'Android', 'MEDIA', 1200.00, 20),
+(4, 'Moto G54', 'Android', 'BAJA', 900.00, 25);
 
-MySQL esté en ejecución
+INSERT INTO ventas (id_cliente, total) VALUES
+(1, 5600.00),
+(2, 1200.00);
 
-El conector MySQL Connector/J esté agregado al proyecto
+INSERT INTO detalle_ventas (id_venta, id_celular, cantidad, subtotal) VALUES
+(1, 1, 1, 3800.00),
+(1, 2, 1, 1800.00),
+(2, 4, 1, 1200.00);
+```
 
-La base de datos configurada coincida con la usada en el código
+---
 
-💻 Requisitos del sistema
+## 🔌 Configuración de conexión MySQL
 
-Java 17 o superior
+Configurar en la clase `ConexionDB`:
 
-MySQL 8 o superior
+- **URL:** `jdbc:mysql://localhost:3306/tecnostore`
+- **Usuario:** `root`
+- **Contraseña:** tu contraseña de MySQL
+- **Driver:** `com.mysql.cj.jdbc.Driver`
 
-MySQL Connector/J
+---
 
-IDE (NetBeans, IntelliJ IDEA o Eclipse)
+## 📦 Requisitos
 
-🚀 Posibles mejoras futuras
+- MySQL en ejecución
+- MySQL Connector/J agregado al proyecto
+- Java 17 o superior
 
-Este proyecto sirve como base para extender funcionalidades como:
+---
 
-Actualizar y eliminar celulares
+## 📌 Notas Finales
 
-Gestión de clientes y ventas
+Proyecto académico orientado a reforzar conocimientos en:
 
-Manejo de excepciones personalizadas
-
-Reportes y análisis de datos
-
-Aplicación de patrones de diseño
-
-Implementación de principios SOLID
+- JDBC
+- Bases de datos relacionales
+- Relaciones uno a muchos
+- Manejo de claves foráneas
+- Arquitectura básica por capas en Java
